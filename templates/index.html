@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI ニュース</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', 'Hiragino Sans', sans-serif;
+      background: #f4f6f9;
+      color: #222;
+    }
+
+    header {
+      background: #1a1a2e;
+      color: #fff;
+      padding: 20px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    header h1 { font-size: 1.3rem; letter-spacing: 0.05em; }
+
+    .updated {
+      font-size: 0.75rem;
+      color: #aaa;
+    }
+
+    .refresh-btn {
+      background: #4f8ef7;
+      color: #fff;
+      border: none;
+      padding: 6px 14px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.85rem;
+    }
+
+    .refresh-btn:hover { background: #3a7de0; }
+
+    main {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 24px 16px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+    }
+
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      transition: transform 0.15s, box-shadow 0.15s;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+    }
+
+    .card a {
+      text-decoration: none;
+      color: inherit;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+
+    .card-thumb {
+      width: 100%;
+      aspect-ratio: 16/9;
+      object-fit: cover;
+      background: #e8ecf0;
+    }
+
+    .card-thumb-placeholder {
+      width: 100%;
+      aspect-ratio: 16/9;
+      background: linear-gradient(135deg, #1a1a2e, #4f8ef7);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 2rem;
+    }
+
+    .card-body {
+      padding: 14px 16px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .card-source {
+      font-size: 0.7rem;
+      color: #4f8ef7;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .card-title {
+      font-size: 0.95rem;
+      font-weight: 600;
+      line-height: 1.5;
+      flex: 1;
+    }
+
+    .card-date {
+      font-size: 0.75rem;
+      color: #888;
+      margin-top: auto;
+    }
+
+    .empty {
+      text-align: center;
+      color: #888;
+      padding: 60px 0;
+      font-size: 1rem;
+    }
+
+    @media (max-width: 500px) {
+      header h1 { font-size: 1.1rem; }
+      .grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>🤖 AI ニュース</h1>
+  <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;">
+    <span class="updated">最終更新: {{ updated_at }}</span>
+    <button class="refresh-btn" onclick="location.reload()">更新</button>
+  </div>
+</header>
+
+<main>
+  {% if articles %}
+  <div class="grid">
+    {% for article in articles %}
+    <div class="card">
+      <a href="{{ article.url }}" target="_blank" rel="noopener">
+        {% if article.thumb %}
+          <img class="card-thumb" src="{{ article.thumb }}" alt="" loading="lazy"
+               onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+          <div class="card-thumb-placeholder" style="display:none">🤖</div>
+        {% else %}
+          <div class="card-thumb-placeholder">🤖</div>
+        {% endif %}
+        <div class="card-body">
+          <span class="card-source">{{ article.source }}</span>
+          <p class="card-title">{{ article.title }}</p>
+          <span class="card-date">{{ article.date }}</span>
+        </div>
+      </a>
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}
+  <div class="empty">ニュースを取得中...</div>
+  {% endif %}
+</main>
+
+</body>
+</html>
