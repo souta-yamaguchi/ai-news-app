@@ -12,6 +12,16 @@ SOURCES = [
         'rss':  'https://rss.itmedia.co.jp/rss/2.0/aiplus.xml',
         'filter': None,
     },
+    {
+        'name': 'AINOW',
+        'rss':  'https://ainow.ai/feed/',
+        'filter': None,
+    },
+    {
+        'name': 'Zenn AI',
+        'rss':  'https://zenn.dev/topics/ai/feed',
+        'filter': None,
+    },
 ]
 
 def parse_rss(url, source_name, filter_path=None):
